@@ -58,7 +58,7 @@ new_note() {
     note_content=${note_name#*." "}                 # Removes the first sentence from the string, leaving only the note content
     note_name=${note_name%%". "*}                   # Removes the everything after the first sentence, leaving only the name.
 
-    # Actions to take if $note_category exists
+    # Actions to take if $note_category does not exist
     if [[ -z $note_category ]]; then
         note_category="quicknotes" 
     fi
@@ -71,6 +71,12 @@ new_note() {
     # For single sentence notes, $note_content is assigned the value of $note_name
     if [[ -z $note_content ]]; then
         note_content="$note_name"
+    fi
+
+    confirm_tags=$(enquirer confirm -m "Would you like to add any tags?")
+
+    if [[ $confirm_tags == "true" ]]; then
+        note_tags=$(enquirer input -m "Enter comma-separated list of tags:")
     fi
 
     # Output content
